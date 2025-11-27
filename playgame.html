@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Games - Play&Win</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🎮</div>
+                <h2>Play&Win</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="playgame.html" class="nav-link active">Play Games</a>
+                <a href="profile.html" class="nav-link">Withdraw</a>
+                <span class="balance-badge" id="userBalance">0 PKR</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="games-container">
+            <h1 class="games-title">🎮 Play Games & Earn Money</h1>
+            <p class="games-subtitle">Click on any game to start playing and earning!</p>
+            
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">🎰</div>
+                    <h3>Slot Machine</h3>
+                    <p class="game-desc">Spin and win big rewards!</p>
+                    <a href="https://www.cpagrip.com/show_ad.php?ad=3893183" target="_blank" class="btn btn-primary game-btn">
+                        Play Now 🎰
+                    </a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">🃏</div>
+                    <h3>Casino Game</h3>
+                    <p class="game-desc">Test your luck and skills!</p>
+                    <a href="https://www.cpagrip.com/show_ad.php?ad=3893184" target="_blank" class="btn btn-primary game-btn">
+                        Play Now 🃏
+                    </a>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-icon">🧩</div>
+                    <h3>Puzzle Game</h3>
+                    <p class="game-desc">Challenge your brain!</p>
+                    <a href="https://www.cpagrip.com/show_ad.php?ad=3893185" target="_blank" class="btn btn-primary game-btn">
+                        Play Now 🧩
+                    </a>
+                </div>
+            </div>
+
+            <div class="earnings-info">
+                <h3>💰 How to Earn Money:</h3>
+                <ul>
+                    <li>Click on any game to play</li>
+                    <li>Complete game levels</li>
+                    <li>Watch ads for extra earnings</li>
+                    <li>Withdraw your money instantly</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                loadUserData();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        async function loadUserData() {
+            try {
+                const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    document.getElementById('userBalance').textContent = userData.balance + ' PKR';
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+    </script>
+</body>
+</html>
